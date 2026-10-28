@@ -36,12 +36,12 @@ jobs:
           -PADMOB_BANNER_ID="$ADMOB_BANNER_ID"
 
       - name: Debug-APK umbenennen
-        run: cp app/build/outputs/apk/debug/app-debug.apk Fotos-zu-PDF-test.apk
+        run: cp app/build/outputs/apk/debug/app-debug.apk FotoPdf.apk
 
       - uses: actions/upload-artifact@v4
         with:
-          name: Fotos-zu-PDF-test
-          path: Fotos-zu-PDF-test.apk
+          name: FotoPdf
+          path: FotoPdf.apk
 
       - name: Keystore bereitstellen
         if: env.HAS_KEYSTORE == 'true'
@@ -61,23 +61,23 @@ jobs:
       - name: Release-Dateien umbenennen
         if: env.HAS_KEYSTORE == 'true'
         run: |
-          cp app/build/outputs/apk/release/app-release.apk Fotos-zu-PDF.apk
-          cp app/build/outputs/bundle/release/app-release.aab Fotos-zu-PDF.aab
+          cp app/build/outputs/apk/release/app-release.apk FotoPdf-signiert.apk
+          cp app/build/outputs/bundle/release/app-release.aab FotoPdf.aab
 
       - uses: actions/upload-artifact@v4
         if: env.HAS_KEYSTORE == 'true'
         with:
-          name: Fotos-zu-PDF-release
+          name: FotoPdf-signiert
           path: |
-            Fotos-zu-PDF.apk
-            Fotos-zu-PDF.aab
+            FotoPdf-signiert.apk
+            FotoPdf.aab
 
       - name: GitHub-Release (bei Tag, z. B. 1.0)
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            Fotos-zu-PDF-test.apk
-            Fotos-zu-PDF.apk
-            Fotos-zu-PDF.aab
+            FotoPdf.apk
+            FotoPdf-signiert.apk
+            FotoPdf.aab
           fail_on_unmatched_files: false

@@ -5,7 +5,7 @@ Android-App: mehrere Fotos auswählen, sortieren, drehen und als PDF in „Downl
 ## Auf GitHub bauen
 
 1. Neues (privates) Repo anlegen, Inhalt dieses Ordners hochladen.
-2. Unter **Actions → Build** läuft der Build bei jedem Push. Ergebnis: Artefakt **Fotos-zu-PDF-test** (`Fotos-zu-PDF-test.apk`) – installierbar zum Testen, mit Google-Test-Werbung.
+2. Unter **Actions → Build** läuft der Build bei jedem Push. Ergebnis: Artefakt **FotoPdf** (`FotoPdf.apk`) – installierbar zum Testen, mit Google-Test-Werbung.
 3. Release-Link zum Weitergeben: Tag `1.0` setzen → APK hängt automatisch am GitHub-Release.
 
 ## Echte Werbung (AdMob)
@@ -22,7 +22,7 @@ Ohne diese Secrets nimmt der Build die Google-Test-IDs. Im Code stehen nie echte
 
 ## Signiert für den Play Store
 
-Zusätzlich diese Secrets: `KEYSTORE_BASE64` (Keystore-Datei als Base64), `KEYSTORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD`. Dann entstehen `Fotos-zu-PDF.apk` und `Fotos-zu-PDF.aab` (Play Store braucht die AAB).
+Zusätzlich diese Secrets: `KEYSTORE_BASE64` (Keystore-Datei als Base64), `KEYSTORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD`. Dann entstehen `FotoPdf-signiert.apk` und `FotoPdf.aab` (Play Store braucht die AAB).
 Keystore sicher aufbewahren – ohne ihn gibt es keine Updates.
 
 ## Vor dem Play-Store-Start
