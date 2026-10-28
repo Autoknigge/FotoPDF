@@ -3,7 +3,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/tanne"
+    android:background="@drawable/bg_screen"
     android:orientation="vertical">
 
     <LinearLayout
@@ -161,7 +161,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="14dp"
         android:layout_marginBottom="6dp"
-        android:background="@drawable/bg_tile_ocker"
+        android:background="@drawable/bg_btn_gold"
         android:clickable="true"
         android:focusable="true"
         android:gravity="center_vertical"
@@ -188,7 +188,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Foto speichern"
-                android:textColor="#2A1604"
+                android:textColor="@color/auf_gold"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -196,7 +196,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="In „Bilder“ als JPEG"
-                android:textColor="#3F230A"
+                android:textColor="@color/auf_gold_sub"
                 android:textSize="13sp" />
         </LinearLayout>
 
@@ -204,7 +204,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="›"
-            android:textColor="#2A1604"
+            android:textColor="@color/auf_gold"
             android:textSize="30sp"
             android:textStyle="bold" />
     </LinearLayout>

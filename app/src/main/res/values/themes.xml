@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.FotosZuPdf" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@color/tanne</item>
+        <item name="android:windowBackground">@drawable/bg_screen</item>
         <item name="android:textColor">@color/text_hell</item>
         <item name="colorAccent">@color/gold</item>
         <item name="colorPrimary">@color/tanne</item>
