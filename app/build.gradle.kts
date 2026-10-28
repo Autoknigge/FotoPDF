@@ -35,6 +35,14 @@ android {
     }
 
     signingConfigs {
+        // Fester Schlüssel für Testversionen: Updates lassen sich so über die alte Version installieren.
+        // Er ist öffentlich und gilt NICHT für den Play Store (dafür gibt es den geheimen Release-Schlüssel).
+        getByName("debug") {
+            storeFile = file("debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
         if (hasSigning) {
             create("release") {
                 storeFile = file(ksFile!!)
