@@ -94,7 +94,7 @@ class CropActivity : AppCompatActivity() {
         applyBorder()
 
         adManager = AdManager(this, findViewById<FrameLayout>(R.id.adContainer), null)
-        adManager.start()
+        Intro.run(this) { adManager.start() }
 
         val incoming = if (intent?.action == Intent.ACTION_SEND) {
             IntentCompat.getParcelableExtra(intent, Intent.EXTRA_STREAM, Uri::class.java)

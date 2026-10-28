@@ -94,7 +94,7 @@ class PdfActivity : AppCompatActivity() {
         findViewById<View>(R.id.btnBack).setOnClickListener { finish() }
 
         adManager = AdManager(this, findViewById<FrameLayout>(R.id.adContainer), null)
-        adManager.start()
+        Intro.run(this) { adManager.start() }
 
         updateUi()
         if (savedInstanceState == null) handleIncoming(intent)

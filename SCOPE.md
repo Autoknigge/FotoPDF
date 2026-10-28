@@ -30,6 +30,7 @@ Muster wie Video-Teiler: GitHub-Build (Actions), Gratis-Version mit AdMob-Banner
 **Werbung / Rechtliches**
 - AdMob-Banner am Fuß, immer sichtbar (Platz ist fest reserviert)
 - Google-Einwilligungsabfrage (UMP) beim Start, Eintrag „Werbe-Einstellungen" erscheint, wo vorgeschrieben
+- Hinweis-Dialog „Kostenlos dank Werbung“ beim ersten Start, vor der Google-Zustimmungsabfrage
 - Hinweis „Eine Idee von autoknigge.de" (Link) und Link „Datenschutz"
 - Nur Deutsch; Aussehen wie Video-Teiler (Kopfkachel, Farbverlauf-Kacheln mit Goldrand, gleiche Fußzeile mit Datenschutz · Impressum · Werbe-Einstellungen)
 

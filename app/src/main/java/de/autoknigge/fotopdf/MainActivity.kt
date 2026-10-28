@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.tvVersion).text = parts.take(2).joinToString(".")
 
         adManager = AdManager(this, findViewById<FrameLayout>(R.id.adContainer), adLink)
-        adManager.start()
+        Intro.run(this) { adManager.start() }
     }
 
     override fun onPause() {
