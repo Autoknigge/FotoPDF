@@ -10,7 +10,7 @@ Muster wie Video-Teiler: GitHub-Build (Actions), Gratis-Version mit AdMob-Banner
 - Liste mit Vorschau: nach oben/unten verschieben, um 90° drehen, entfernen
 - Seitenformat: **A4 mit Rand** (Hoch-/Querformat automatisch je Foto) oder **Bildgröße** (Seite = Foto)
 - Qualität: Hoch / Mittel / Klein (Auflösung + JPEG-Stufe; Standard Mittel)
-- Eigener Dateiname (Vorgabe: `Fotos_JJJJMMTT_HHMM`)
+- Eigener Dateiname (Vorgabe: `Fotos_JJJJMMTT_HHMM`); optional „Ordner und Namen beim Speichern selbst wählen“ (Systemdialog „Speichern unter“)
 - PDF wird in **Downloads** gespeichert; danach **Teilen** oder **Öffnen**
 - Datenschutz eingebaut: Fotos werden neu kodiert, EXIF/Standort/Kameradaten landen **nicht** im PDF; das PDF enthält keine Metadaten (Autor, Programm usw.)
 - Verarbeitung ein Foto nach dem anderen → auch große Stapel ohne Speicherprobleme; alles lokal, kein Upload

@@ -4,11 +4,12 @@ import android.content.ContentValues
 import android.content.Context
 import android.net.Uri
 import android.os.Environment
+import android.provider.DocumentsContract
 import android.provider.MediaStore
 import java.io.BufferedOutputStream
 import kotlin.math.min
 
-class ExportResult(val uri: Uri, val fileName: String, val pages: Int, val skipped: Int)
+class ExportResult(val uri: Uri, val fileName: String, val pages: Int, val skipped: Int, val custom: Boolean)
 
 object PdfExporter {
 
@@ -24,6 +25,7 @@ object PdfExporter {
         maxSide: Int,
         jpegQuality: Int,
         fileName: String,
+        customTarget: Uri?,
         onProgress: (Int) -> Unit
     ): ExportResult {
         val resolver = ctx.contentResolver
@@ -33,7 +35,8 @@ object PdfExporter {
             put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
             put(MediaStore.Downloads.IS_PENDING, 1)
         }
-        val target = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)
+        val target = customTarget
+            ?: resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)
             ?: throw IllegalStateException("Datei konnte nicht angelegt werden.")
 
         try {
@@ -72,13 +75,19 @@ object PdfExporter {
                 pdf.finish()
             }
 
-            val done = ContentValues().apply { put(MediaStore.Downloads.IS_PENDING, 0) }
-            resolver.update(target, done, null, null)
+            if (customTarget == null) {
+                val done = ContentValues().apply { put(MediaStore.Downloads.IS_PENDING, 0) }
+                resolver.update(target, done, null, null)
+            }
 
-            return ExportResult(target, fileName, pages, skipped)
+            return ExportResult(target, fileName, pages, skipped, customTarget != null)
         } catch (t: Throwable) {
             try {
-                resolver.delete(target, null, null)
+                if (customTarget != null) {
+                    DocumentsContract.deleteDocument(resolver, target)
+                } else {
+                    resolver.delete(target, null, null)
+                }
             } catch (ignored: Exception) {
             }
             throw t

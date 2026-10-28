@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ProgressBar
@@ -46,9 +47,15 @@ class PdfActivity : AppCompatActivity() {
     private lateinit var rgFormat: RadioGroup
     private lateinit var rgQuality: RadioGroup
     private lateinit var progress: ProgressBar
+    private lateinit var cbAsk: CheckBox
+    private var pendingName = ""
 
     private val picker = registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()) { uris ->
         addUris(uris)
+    }
+
+    private val saveAs = registerForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { uri ->
+        if (uri != null) startExport(uri)
     }
 
     private val scanLauncher = registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
@@ -70,6 +77,7 @@ class PdfActivity : AppCompatActivity() {
         rgFormat = findViewById(R.id.rgFormat)
         rgQuality = findViewById(R.id.rgQuality)
         progress = findViewById(R.id.progress)
+        cbAsk = findViewById(R.id.cbAsk)
 
         etName.setText("Fotos_" + SimpleDateFormat("yyyyMMdd_HHmm", Locale.GERMANY).format(Date()))
 
@@ -172,7 +180,17 @@ class PdfActivity : AppCompatActivity() {
         val baseName = sanitize(etName.text.toString()).ifBlank {
             "Fotos_" + SimpleDateFormat("yyyyMMdd_HHmm", Locale.GERMANY).format(Date())
         }
-        val fileName = "$baseName.pdf"
+        pendingName = "$baseName.pdf"
+        if (cbAsk.isChecked) {
+            saveAs.launch(pendingName) // Systemdialog: Ordner und Name selbst wählen
+        } else {
+            startExport(null)
+        }
+    }
+
+    private fun startExport(target: Uri?) {
+        if (busy || items.isEmpty()) return
+        val fileName = pendingName
         val a4 = rgFormat.checkedRadioButtonId == R.id.rbA4
 
         val maxSide: Int
@@ -193,7 +211,7 @@ class PdfActivity : AppCompatActivity() {
         worker.execute {
             val result = try {
                 Result.success(
-                    PdfExporter.export(this, snapshot, a4, maxSide, quality, fileName) { done ->
+                    PdfExporter.export(this, snapshot, a4, maxSide, quality, fileName, target) { done ->
                         runOnUiThread { progress.progress = done }
                     }
                 )
@@ -222,7 +240,7 @@ class PdfActivity : AppCompatActivity() {
 
     private fun showDone(r: ExportResult) {
         val sites = if (r.pages == 1) "1 Seite" else "${r.pages} Seiten"
-        var msg = "Gespeichert in „Downloads“:\n${r.fileName} ($sites)"
+        var msg = if (r.custom) "Gespeichert:\n${r.fileName} ($sites)" else "Gespeichert in „Downloads“:\n${r.fileName} ($sites)"
         if (r.skipped > 0) msg += "\n\n${r.skipped} Foto(s) konnten nicht gelesen werden und fehlen im PDF."
 
         AlertDialog.Builder(this)

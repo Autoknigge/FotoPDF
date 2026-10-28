@@ -21,8 +21,8 @@
                     android:endColor="#96551A"
                     android:startColor="#F2AD52" />
                 <stroke
-                    android:width="2.5dp"
-                    android:color="#E3C770" />
+                    android:width="3dp"
+                    android:color="#000000" />
                 <corners android:radius="20dp" />
             </shape>
         </item>

@@ -260,6 +260,15 @@
                 android:textColor="@color/text_hell" />
         </RadioGroup>
 
+        <CheckBox
+            android:id="@+id/cbAsk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/gold"
+            android:text="Ordner und Namen beim Speichern selbst wählen"
+            android:textColor="@color/text_hell"
+            android:textSize="14sp" />
+
         <EditText
             android:id="@+id/etName"
             android:layout_width="match_parent"
