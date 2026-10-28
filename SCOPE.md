@@ -29,7 +29,7 @@ Muster wie Video-Teiler: GitHub-Build (Actions), Gratis-Version mit AdMob-Banner
 - Nur Deutsch; Aussehen wie Video-Teiler (Kopfkachel, Farbverlauf-Kacheln mit Goldrand, gleiche Fußzeile mit Datenschutz · Impressum · Werbe-Einstellungen)
 
 **Build**
-- GitHub Actions: APK bei jedem Push, Release-Anhang bei Tag `v*`
+- GitHub Actions: APK bei jedem Push, Release-Anhang bei Tag (z. B. `1.0`)
 - Optional signiert (Secrets), dann zusätzlich AAB für den Play Store
 
 ## Bewusst nicht in 1.0

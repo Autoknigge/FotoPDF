@@ -6,7 +6,7 @@ Android-App: mehrere Fotos auswählen, sortieren, drehen und als PDF in „Downl
 
 1. Neues (privates) Repo anlegen, Inhalt dieses Ordners hochladen.
 2. Unter **Actions → Build** läuft der Build bei jedem Push. Ergebnis: Artefakt **Fotos-zu-PDF-test** (`Fotos-zu-PDF-test.apk`) – installierbar zum Testen, mit Google-Test-Werbung.
-3. Release-Link zum Weitergeben: Tag `v1.0.0` setzen → APK hängt automatisch am GitHub-Release.
+3. Release-Link zum Weitergeben: Tag `1.0` setzen → APK hängt automatisch am GitHub-Release.
 
 ## Echte Werbung (AdMob)
 
