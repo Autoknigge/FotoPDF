@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val URL_HOME = "https://autoknigge.de"
         private const val URL_IMPRINT = "https://autoknigge.de/impressum"
-        private const val URL_PRIVACY = "https://autoknigge.de/fotos-zu-pdf/"
+        private const val URL_PRIVACY = "https://autoknigge.de/fotos-zu-pdf/datenschutz.html"
     }
 
     private lateinit var adManager: AdManager

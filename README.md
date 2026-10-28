@@ -27,7 +27,7 @@ Keystore sicher aufbewahren – ohne ihn gibt es keine Updates.
 
 ## Vor dem Play-Store-Start
 
-- Datenschutzerklärung unter `https://autoknigge.de/fotos-zu-pdf/` anlegen (Link ist in der App hinterlegt, Konstante `URL_PRIVACY` in `MainActivity.kt`). Inhalt: Fotos werden nur auf dem Gerät verarbeitet; Werbung über Google AdMob, Einwilligung über Google UMP.
+- Datenschutzerklärung unter `https://autoknigge.de/fotos-zu-pdf/datenschutz.html` anlegen (Link ist in der App hinterlegt, Konstante `URL_PRIVACY` in `MainActivity.kt`). Inhalt: Fotos werden nur auf dem Gerät verarbeitet; Werbung über Google AdMob, Einwilligung über Google UMP.
 - Play Console: Datenschutz-Angaben (Werbe-ID, AdMob) ausfüllen.
 - Paketname `de.autoknigge.fotopdf` ist festgelegt – nach der Veröffentlichung nicht mehr änderbar.
 - `targetSdk` (aktuell 36) vor Upload gegen die aktuelle Play-Vorgabe prüfen.
