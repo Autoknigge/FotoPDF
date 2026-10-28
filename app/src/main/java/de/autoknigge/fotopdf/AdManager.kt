@@ -1,13 +1,18 @@
 package de.autoknigge.fotopdf
 
 import android.app.Activity
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.Toast
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.appopen.AppOpenAd
 import com.google.android.ump.ConsentInformation
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.UserMessagingPlatform
@@ -19,7 +24,8 @@ import com.google.android.ump.UserMessagingPlatform
 class AdManager(
     private val activity: Activity,
     private val container: FrameLayout,
-    private val adSettingsLink: View?
+    private val adSettingsLink: View?,
+    private val withStartAd: Boolean = false
 ) {
     private var started = false
     private var adsInitialized = false
@@ -69,6 +75,33 @@ class AdManager(
         adsInitialized = true
         MobileAds.initialize(activity) { }
         loadBanner()
+        if (withStartAd) loadStartAd()
+    }
+
+    /** Kurze Anzeige beim Start: nur einmal je App-Start, nur wenn sie schnell genug geladen ist. */
+    private fun loadStartAd() {
+        if (startAdHandled) return
+        startAdHandled = true
+        var timedOut = false
+        val handler = Handler(Looper.getMainLooper())
+        handler.postDelayed({ timedOut = true }, 4000)
+        AppOpenAd.load(
+            activity,
+            BuildConfig.ADMOB_OPEN_ID,
+            AdRequest.Builder().build(),
+            object : AppOpenAd.AppOpenAdLoadCallback() {
+                override fun onAdLoaded(ad: AppOpenAd) {
+                    handler.removeCallbacksAndMessages(null)
+                    if (timedOut || activity.isFinishing || activity.isDestroyed) return
+                    ad.fullScreenContentCallback = object : FullScreenContentCallback() {}
+                    ad.show(activity)
+                }
+
+                override fun onAdFailedToLoad(error: LoadAdError) {
+                    handler.removeCallbacksAndMessages(null)
+                }
+            }
+        )
     }
 
     private fun loadBanner() {
@@ -96,5 +129,9 @@ class AdManager(
     fun destroy() {
         adView?.destroy()
         adView = null
+    }
+
+    companion object {
+        private var startAdHandled = false
     }
 }

@@ -3,14 +3,18 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
-// AdMob-IDs: ohne Angabe werden die Google-Test-IDs verwendet (sicher für Tests).
-// Echte IDs per -PADMOB_APP_ID=... -PADMOB_BANNER_ID=... oder als GitHub-Secrets (siehe README).
+// AdMob-IDs von Fotos zu PDF (öffentliche Kennungen, stehen in jeder APK).
+// Überschreibbar per -PADMOB_APP_ID=... usw. oder GitHub-Secrets. Zum Testen mit Google-Test-IDs:
+// App ca-app-pub-3940256099942544~3347511713, Banner .../9214589741, App-Start .../9257395921
 val admobAppId: String =
     (project.findProperty("ADMOB_APP_ID") as String?)?.takeIf { it.isNotBlank() }
-        ?: "ca-app-pub-3940256099942544~3347511713"
+        ?: "ca-app-pub-7178658520690671~3704376989"
 val admobBannerId: String =
     (project.findProperty("ADMOB_BANNER_ID") as String?)?.takeIf { it.isNotBlank() }
-        ?: "ca-app-pub-3940256099942544/9214589741"
+        ?: "ca-app-pub-7178658520690671/2897515593"
+val admobOpenId: String =
+    (project.findProperty("ADMOB_OPEN_ID") as String?)?.takeIf { it.isNotBlank() }
+        ?: "ca-app-pub-7178658520690671/9862591223"
 
 val ksFile = project.findProperty("KEYSTORE_FILE") as String?
 val ksPassword = project.findProperty("KEYSTORE_PASSWORD") as String?
@@ -32,6 +36,7 @@ android {
 
         manifestPlaceholders["admobAppId"] = admobAppId
         buildConfigField("String", "ADMOB_BANNER_ID", "\"$admobBannerId\"")
+        buildConfigField("String", "ADMOB_OPEN_ID", "\"$admobOpenId\"")
     }
 
     signingConfigs {

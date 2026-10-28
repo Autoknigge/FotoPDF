@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         val parts = (packageManager.getPackageInfo(packageName, 0).versionName ?: "").split(".")
         findViewById<TextView>(R.id.tvVersion).text = parts.take(2).joinToString(".")
 
-        adManager = AdManager(this, findViewById<FrameLayout>(R.id.adContainer), adLink)
+        adManager = AdManager(this, findViewById<FrameLayout>(R.id.adContainer), adLink, true)
         Intro.run(this) { adManager.start() }
     }
 
