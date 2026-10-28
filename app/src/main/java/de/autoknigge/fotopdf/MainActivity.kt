@@ -28,6 +28,9 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.tilePdf).setOnClickListener {
             startActivity(Intent(this, PdfActivity::class.java))
         }
+        findViewById<View>(R.id.tileScan).setOnClickListener {
+            startActivity(Intent(this, PdfActivity::class.java).putExtra("scan", true))
+        }
         findViewById<View>(R.id.tileCrop).setOnClickListener {
             startActivity(Intent(this, CropActivity::class.java))
         }

@@ -15,7 +15,12 @@ Muster wie Video-Teiler: GitHub-Build (Actions), Gratis-Version mit AdMob-Banner
 - Datenschutz eingebaut: Fotos werden neu kodiert, EXIF/Standort/Kameradaten landen **nicht** im PDF; das PDF enthält keine Metadaten (Autor, Programm usw.)
 - Verarbeitung ein Foto nach dem anderen → auch große Stapel ohne Speicherprobleme; alles lokal, kein Upload
 
-**Foto zuschneiden (zweite Kachel im Startmenü)**
+**Dokument scannen (Kachel im Startmenü und im PDF-Bildschirm)**
+- Google-Dokumentenscanner (ML Kit): Kamera, automatische Randerkennung, Zuschnitt, Entzerren, Galerie-Import, bis 30 Seiten
+- Die Seiten landen direkt in der PDF-Liste (sortieren, drehen, PDF erstellen)
+- Läuft über die Google-Play-Dienste, keine eigene Kamera-Berechtigung nötig
+
+**Foto zuschneiden (Kachel im Startmenü)**
 - Ein Foto wählen (oder aus der Galerie teilen), Ausschnitt mit einem Finger verschieben, mit zwei Fingern zoomen
 - Formate: Frei (Ränder ziehen), Original, 1:1, 4:3, 3:2 (10×15), 4:5 (Instagram), 16:9, 9:16 (WhatsApp-Status), Passbild 35×45, A4
 - Hoch/Quer umschalten, um 90° drehen
@@ -35,5 +40,5 @@ Muster wie Video-Teiler: GitHub-Build (Actions), Gratis-Version mit AdMob-Banner
 ## Bewusst nicht in 1.0
 - Gesichter verpixeln (geplant 1.1, passt in den Foto-Editor)
 - Pro-Version / App-Start-Anzeige (noch nicht entschieden, siehe README)
-- Kamera/Scanner, Filter, Helligkeit/Korrekturen, Text/Sticker, PDF-Passwort, Texterkennung, Drag-and-drop-Sortierung
+- Eigene Kamera-Aufnahme für Fotos, Filter, Helligkeit/Korrekturen, Text/Sticker, PDF-Passwort, Texterkennung, Drag-and-drop-Sortierung
 - Mehrsprachigkeit

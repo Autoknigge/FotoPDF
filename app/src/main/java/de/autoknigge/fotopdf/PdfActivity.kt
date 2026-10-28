@@ -51,6 +51,10 @@ class PdfActivity : AppCompatActivity() {
         addUris(uris)
     }
 
+    private val scanLauncher = registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+        addUris(ScanHelper.pages(result))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -78,6 +82,7 @@ class PdfActivity : AppCompatActivity() {
             picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
         btnCreate.setOnClickListener { createPdf() }
+        findViewById<View>(R.id.btnScan).setOnClickListener { ScanHelper.start(this, scanLauncher) }
         findViewById<View>(R.id.btnBack).setOnClickListener { finish() }
 
         adManager = AdManager(this, findViewById<FrameLayout>(R.id.adContainer), null)
@@ -114,6 +119,10 @@ class PdfActivity : AppCompatActivity() {
 
     private fun handleIncoming(intent: Intent?) {
         if (intent == null) return
+        if (intent.getBooleanExtra("scan", false)) {
+            intent.removeExtra("scan")
+            ScanHelper.start(this, scanLauncher)
+        }
         when (intent.action) {
             Intent.ACTION_SEND -> {
                 val uri = IntentCompat.getParcelableExtra(intent, Intent.EXTRA_STREAM, Uri::class.java)
