@@ -13,6 +13,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val URL_HOME = "https://autoknigge.de"
+        private const val URL_APPS = "https://autoknigge.de/apps/"
         private const val URL_IMPRINT = "https://autoknigge.de/impressum"
         private const val URL_PRIVACY = "https://autoknigge.de/fotos-zu-pdf/datenschutz.html"
     }
@@ -37,6 +38,7 @@ class MainActivity : AppCompatActivity() {
 
         mapOf(
             R.id.tvAbout to URL_HOME,
+            R.id.tvMoreApps to URL_APPS,
             R.id.tvPrivacy to URL_PRIVACY,
             R.id.tvImprint to URL_IMPRINT
         ).forEach { (id, url) ->
