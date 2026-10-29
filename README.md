@@ -1,6 +1,6 @@
 # FotoPDF (Fotos zu PDF)
 
-Android-App: mehrere Fotos auswählen, sortieren, drehen und als PDF in „Downloads" speichern. Gratis-Version mit AdMob-Banner. Umfang: siehe [SCOPE.md](SCOPE.md).
+Android-App: mehrere Fotos auswählen, sortieren, drehen und als PDF in „Downloads/Fotos zu PDF“ speichern (wahlweise als Kontrast- oder Schwarzweiß-Dokument). Gratis-Version mit AdMob-Banner. Umfang: siehe [SCOPE.md](SCOPE.md).
 
 ## Auf GitHub bauen
 
