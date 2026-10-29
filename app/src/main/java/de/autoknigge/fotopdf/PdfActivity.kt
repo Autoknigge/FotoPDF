@@ -1,6 +1,7 @@
 package de.autoknigge.fotopdf
 
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -49,6 +50,8 @@ class PdfActivity : AppCompatActivity() {
     private lateinit var progress: ProgressBar
     private lateinit var cbAsk: CheckBox
     private var pendingName = ""
+    private var lastResult: ExportResult? = null
+    private lateinit var rowResult: View
 
     private val picker = registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()) { uris ->
         addUris(uris)
@@ -90,6 +93,9 @@ class PdfActivity : AppCompatActivity() {
             picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
         btnCreate.setOnClickListener { createPdf() }
+        rowResult = findViewById(R.id.rowResult)
+        findViewById<View>(R.id.btnSend).setOnClickListener { lastResult?.let { sharePdf(it.uri) } }
+        findViewById<View>(R.id.btnPrint).setOnClickListener { lastResult?.let { printPdf(it) } }
         findViewById<View>(R.id.btnScan).setOnClickListener { ScanHelper.start(this, scanLauncher) }
         findViewById<View>(R.id.btnBack).setOnClickListener { finish() }
 
@@ -239,6 +245,8 @@ class PdfActivity : AppCompatActivity() {
         name.trim().removeSuffix(".pdf").replace(Regex("[\\\\/:*?\"<>|]"), "_").take(80)
 
     private fun showDone(r: ExportResult) {
+        lastResult = r
+        rowResult.visibility = View.VISIBLE
         val sites = if (r.pages == 1) "1 Seite" else "${r.pages} Seiten"
         var msg = if (r.custom) "Gespeichert:\n${r.fileName} ($sites)" else "Gespeichert in „Downloads“:\n${r.fileName} ($sites)"
         if (r.skipped > 0) msg += "\n\n${r.skipped} Foto(s) konnten nicht gelesen werden und fehlen im PDF."
@@ -259,6 +267,58 @@ class PdfActivity : AppCompatActivity() {
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
         startActivity(Intent.createChooser(send, "PDF teilen"))
+    }
+
+    /** Druckt über den Android-Druckdienst; ohne Druckdienst Hinweis mit Weg zur Drucker-App. */
+    private fun printPdf(r: ExportResult) {
+        if (packageManager.queryIntentServices(Intent("android.printservice.PrintService"), 0).isEmpty()) {
+            AlertDialog.Builder(this)
+                .setTitle("Kein Druckdienst gefunden")
+                .setMessage("Auf diesem Gerät ist kein Druckdienst aktiv (z. B. „Epson Print Enabler“). Du kannst ihn in den Druckeinstellungen aktivieren oder die PDF an deine Drucker-App senden.")
+                .setPositiveButton("Druckeinstellungen") { _, _ ->
+                    try {
+                        startActivity(Intent(android.provider.Settings.ACTION_PRINT_SETTINGS))
+                    } catch (e: ActivityNotFoundException) {
+                        Toast.makeText(this, "Die Druckeinstellungen konnten nicht geöffnet werden.", Toast.LENGTH_LONG).show()
+                    }
+                }
+                .setNeutralButton("An Drucker-App senden") { _, _ -> sharePdf(r.uri) }
+                .setNegativeButton("Abbrechen", null)
+                .show()
+            return
+        }
+        val pm = getSystemService(Context.PRINT_SERVICE) as android.print.PrintManager
+        val adapter = object : android.print.PrintDocumentAdapter() {
+            override fun onLayout(
+                old: android.print.PrintAttributes?, new: android.print.PrintAttributes?,
+                cancel: android.os.CancellationSignal?, callback: LayoutResultCallback, extras: Bundle?
+            ) {
+                if (cancel?.isCanceled == true) {
+                    callback.onLayoutCancelled()
+                    return
+                }
+                val info = android.print.PrintDocumentInfo.Builder(r.fileName)
+                    .setContentType(android.print.PrintDocumentInfo.CONTENT_TYPE_DOCUMENT)
+                    .setPageCount(r.pages)
+                    .build()
+                callback.onLayoutFinished(info, true)
+            }
+
+            override fun onWrite(
+                pages: Array<out android.print.PageRange>?, dest: android.os.ParcelFileDescriptor,
+                cancel: android.os.CancellationSignal?, callback: WriteResultCallback
+            ) {
+                try {
+                    contentResolver.openInputStream(r.uri)!!.use { i ->
+                        java.io.FileOutputStream(dest.fileDescriptor).use { o -> i.copyTo(o) }
+                    }
+                    callback.onWriteFinished(arrayOf(android.print.PageRange.ALL_PAGES))
+                } catch (e: Exception) {
+                    callback.onWriteFailed(e.message)
+                }
+            }
+        }
+        pm.print(r.fileName, adapter, null)
     }
 
     private fun openPdf(uri: Uri) {
