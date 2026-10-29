@@ -11,6 +11,7 @@ import android.net.Uri
 import androidx.exifinterface.media.ExifInterface
 import java.io.ByteArrayOutputStream
 import kotlin.math.max
+import kotlin.math.min
 
 data class PhotoItem(val id: Long, val uri: Uri, var rotation: Int = 0)
 
@@ -77,7 +78,7 @@ object Photos {
     }
 
     /** Dreht um [userRotation] Grad, legt das Bild auf weißen Grund und kodiert es als JPEG (ohne Metadaten). */
-    fun toJpeg(src: Bitmap, userRotation: Int, quality: Int): JpegResult {
+    fun toJpeg(src: Bitmap, userRotation: Int, quality: Int, filter: Int = 0): JpegResult {
         var bmp = src
         val turn = ((userRotation % 360) + 360) % 360
         if (turn != 0) {
@@ -89,13 +90,71 @@ object Photos {
         val canvas = Canvas(flat)
         canvas.drawColor(Color.WHITE)
         canvas.drawBitmap(bmp, 0f, 0f, Paint(Paint.FILTER_BITMAP_FLAG))
-
-        val baos = ByteArrayOutputStream(max(64 * 1024, flat.width * flat.height / 8))
-        flat.compress(Bitmap.CompressFormat.JPEG, quality, baos)
-        val result = JpegResult(baos.toByteArray(), flat.width, flat.height)
-
-        flat.recycle()
         if (bmp !== src) bmp.recycle()
+        bmp = src
+
+        val out = applyFilter(flat, filter)
+        val baos = ByteArrayOutputStream(max(64 * 1024, flat.width * flat.height / 8))
+        out.compress(Bitmap.CompressFormat.JPEG, quality, baos)
+        val result = JpegResult(baos.toByteArray(), out.width, out.height)
+
+        if (out !== flat) out.recycle()
+        flat.recycle()
         return result
+    }
+
+    /**
+     * Farbfilter für Dokumente: 1 = Graustufen mit mehr Kontrast und hellerem Papier,
+     * 2 = Schwarzweiß mit örtlicher Schwelle (gleicht Schatten und ungleiches Licht aus).
+     * Gibt [src] unverändert zurück (Filter 0) oder ein neues Bild.
+     */
+    private fun applyFilter(src: Bitmap, filter: Int): Bitmap {
+        if (filter == 0) return src
+        val w = src.width
+        val h = src.height
+        val gray = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+        val gc = Canvas(gray)
+        val cm = android.graphics.ColorMatrix().apply { setSaturation(0f) }
+        if (filter == 1) {
+            val scale = 1.55f
+            val shift = (1f - scale) / 2f * 255f + 28f
+            cm.postConcat(
+                android.graphics.ColorMatrix(
+                    floatArrayOf(
+                        scale, 0f, 0f, 0f, shift,
+                        0f, scale, 0f, 0f, shift,
+                        0f, 0f, scale, 0f, shift,
+                        0f, 0f, 0f, 1f, 0f
+                    )
+                )
+            )
+        }
+        gc.drawBitmap(src, 0f, 0f, Paint(Paint.FILTER_BITMAP_FLAG).apply {
+            colorFilter = android.graphics.ColorMatrixColorFilter(cm)
+        })
+        if (filter == 1) return gray
+
+        // Schwarzweiß: Hintergrundhelligkeit aus stark verkleinerter Kopie schätzen, dann je Pixel vergleichen.
+        val small = Bitmap.createScaledBitmap(gray, max(1, w / 16), max(1, h / 16), true)
+        val bg = Bitmap.createScaledBitmap(small, w, h, true)
+        small.recycle()
+        val rowsPerBand = 48
+        val a = IntArray(w * rowsPerBand)
+        val b = IntArray(w * rowsPerBand)
+        var y = 0
+        while (y < h) {
+            val rows = min(rowsPerBand, h - y)
+            gray.getPixels(a, 0, w, 0, y, w, rows)
+            bg.getPixels(b, 0, w, 0, y, w, rows)
+            for (i in 0 until w * rows) {
+                val g = (a[i] shr 8) and 0xFF
+                val m = (b[i] shr 8) and 0xFF
+                a[i] = if (g < m * 0.86f) Color.BLACK else Color.WHITE
+            }
+            gray.setPixels(a, 0, w, 0, y, w, rows)
+            y += rows
+        }
+        bg.recycle()
+        return gray
     }
 }

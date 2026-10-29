@@ -260,6 +260,48 @@
                 android:textColor="@color/text_hell" />
         </RadioGroup>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Farbe (für Dokumente und Scans)"
+            android:textColor="@color/gold"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <RadioGroup
+            android:id="@+id/rgFilter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbFilterOrig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/gold"
+                android:checked="true"
+                android:text="Original"
+                android:textColor="@color/text_hell" />
+
+            <RadioButton
+                android:id="@+id/rbFilterContrast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:buttonTint="@color/gold"
+                android:text="Kontrast"
+                android:textColor="@color/text_hell" />
+
+            <RadioButton
+                android:id="@+id/rbFilterBw"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:buttonTint="@color/gold"
+                android:text="Schwarzweiß"
+                android:textColor="@color/text_hell" />
+        </RadioGroup>
+
         <CheckBox
             android:id="@+id/cbAsk"
             android:layout_width="wrap_content"

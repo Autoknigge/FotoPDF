@@ -26,6 +26,7 @@ object PdfExporter {
         jpegQuality: Int,
         fileName: String,
         customTarget: Uri?,
+        filter: Int,
         onProgress: (Int) -> Unit
     ): ExportResult {
         val resolver = ctx.contentResolver
@@ -61,7 +62,7 @@ object PdfExporter {
                         skipped++
                     } else {
                         try {
-                            val jpg = Photos.toJpeg(bmp, item.rotation, jpegQuality)
+                            val jpg = Photos.toJpeg(bmp, item.rotation, jpegQuality, filter)
                             addPage(pdf, jpg, a4)
                             pages++
                         } finally {

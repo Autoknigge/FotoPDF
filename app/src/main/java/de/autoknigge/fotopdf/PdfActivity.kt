@@ -47,6 +47,7 @@ class PdfActivity : AppCompatActivity() {
     private lateinit var etName: EditText
     private lateinit var rgFormat: RadioGroup
     private lateinit var rgQuality: RadioGroup
+    private lateinit var rgFilter: RadioGroup
     private lateinit var progress: ProgressBar
     private lateinit var cbAsk: CheckBox
     private var pendingName = ""
@@ -79,6 +80,7 @@ class PdfActivity : AppCompatActivity() {
         etName = findViewById(R.id.etName)
         rgFormat = findViewById(R.id.rgFormat)
         rgQuality = findViewById(R.id.rgQuality)
+        rgFilter = findViewById(R.id.rgFilter)
         progress = findViewById(R.id.progress)
         cbAsk = findViewById(R.id.cbAsk)
 
@@ -199,13 +201,20 @@ class PdfActivity : AppCompatActivity() {
         val fileName = pendingName
         val a4 = rgFormat.checkedRadioButtonId == R.id.rbA4
 
-        val maxSide: Int
+        var maxSide: Int
         val quality: Int
         when (rgQuality.checkedRadioButtonId) {
             R.id.rbHigh -> { maxSide = 2600; quality = 90 }
             R.id.rbLow -> { maxSide = 1100; quality = 65 }
             else -> { maxSide = 1700; quality = 80 }
         }
+
+        val filter = when (rgFilter.checkedRadioButtonId) {
+            R.id.rbFilterContrast -> 1
+            R.id.rbFilterBw -> 2
+            else -> 0
+        }
+        if (filter == 2) maxSide = minOf(maxSide, 2200)
 
         val snapshot = items.map { it.copy() }
         busy = true
@@ -217,7 +226,7 @@ class PdfActivity : AppCompatActivity() {
         worker.execute {
             val result = try {
                 Result.success(
-                    PdfExporter.export(this, snapshot, a4, maxSide, quality, fileName, target) { done ->
+                    PdfExporter.export(this, snapshot, a4, maxSide, quality, fileName, target, filter) { done ->
                         runOnUiThread { progress.progress = done }
                     }
                 )
