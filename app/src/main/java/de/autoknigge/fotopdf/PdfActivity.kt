@@ -248,7 +248,7 @@ class PdfActivity : AppCompatActivity() {
         lastResult = r
         rowResult.visibility = View.VISIBLE
         val sites = if (r.pages == 1) "1 Seite" else "${r.pages} Seiten"
-        var msg = if (r.custom) "Gespeichert:\n${r.fileName} ($sites)" else "Gespeichert in „Downloads“:\n${r.fileName} ($sites)"
+        var msg = if (r.custom) "Gespeichert:\n${r.fileName} ($sites)" else "Gespeichert in „Downloads/Fotos zu PDF“:\n${r.fileName} ($sites)"
         if (r.skipped > 0) msg += "\n\n${r.skipped} Foto(s) konnten nicht gelesen werden und fehlen im PDF."
 
         AlertDialog.Builder(this)

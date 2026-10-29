@@ -325,7 +325,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Wird in „Downloads“ gespeichert"
+                android:text="Wird in „Downloads/Fotos zu PDF“ gespeichert"
                 android:textColor="@color/auf_gold_sub"
                 android:textSize="14sp" />
         </LinearLayout>
